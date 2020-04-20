@@ -33,7 +33,6 @@ public class Main {
 		applications.setApplications(applicationExtractor.getApplications());
 		applications.serializeApplications("allProjects");
 		applications.deserializeApplications("allProjects");
-		// applications.update();
 
 		// Create some stuff to get some backups
 		Helper helper = new Helper(applications.getApplications());
