@@ -25,3 +25,5 @@ build
 ### Java ###
 # Compiled class file
 *.class
+
+functions.csv
