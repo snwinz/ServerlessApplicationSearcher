@@ -105,12 +105,16 @@ public class Helper {
 		Optional<Serverless> serverlessOpt = YamlRead.readYaml(yamlFile, appName);
 		if (serverlessOpt.isPresent()) {
 			Serverless serverless = serverlessOpt.get();
-			if (serverless.getFunctions() != null) {
-				for (var entry : serverless.getFunctions().entrySet()) {
-					result.append(";;").append(entry.getKey()).append(";").append(entry.getValue().getHandler())
-							.append(System.lineSeparator());
+			if (isNodeProject(serverless)) {
+				if (serverless.getFunctions() != null) {
+					for (var entry : serverless.getFunctions().entrySet()) {
+						result.append(";;").append(entry.getKey()).append(";").append(entry.getValue().getHandler())
+								.append(System.lineSeparator());
+					}
 				}
-
+			} else {
+				String runtime = getRuntime(serverless);
+				result.append(";;").append(runtime);
 			}
 		}
 		if (serverlessOpt.isEmpty()) {
@@ -118,6 +122,20 @@ public class Helper {
 		}
 		result.append(System.lineSeparator());
 		return result;
+	}
+
+	private String getRuntime(Serverless serverless) {
+		if (serverless.getProvider() == null) {
+			return "no provider";
+		}
+		if( serverless.getProvider().getRuntime() == null) {
+			return "no runtime";
+		}
+		return serverless.getProvider().getRuntime();
+	}
+
+	private boolean isNodeProject(Serverless serverless) {
+		return getRuntime(serverless).trim().contains("node");
 	}
 
 }
