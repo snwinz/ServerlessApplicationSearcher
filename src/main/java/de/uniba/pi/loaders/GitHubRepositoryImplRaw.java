@@ -1,6 +1,7 @@
 package de.uniba.pi.loaders;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -33,7 +34,8 @@ public class GitHubRepositoryImplRaw {
 			connection.disconnect();
 			reader.close();
 			return retVal;
-		} catch (Exception e) {
+		} catch (IOException e) {
+			System.err.print("Connection could not be started:" );
 			e.printStackTrace();
 			return "";
 		}
