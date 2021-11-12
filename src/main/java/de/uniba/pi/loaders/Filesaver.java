@@ -25,7 +25,7 @@ public class Filesaver {
 		this.gitHubRepositoryImplRaw = gitHubRepositoryImplRaw;
 	}
 
-	public void getFilesForFilename(String[] searchKeysofFile, String filenameBase) throws IOException {
+	public void getFilesForFilename(String[] searchKeysofFile, String filenameBase){
 		while (deleteMostUnregularFile(filenameBase)) {
 			String searchKey = createSearchKey(searchKeysofFile);
 			for (int pageNumber = 1; pageNumber <= 10; pageNumber++) {
