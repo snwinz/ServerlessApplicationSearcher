@@ -22,14 +22,14 @@ public class Applications {
 		return map;
 	}
 
-	private List<ApplicationRepository> applications = new LinkedList<ApplicationRepository>();
-	private HashMap<String, ApplicationRepository> map = new HashMap<String, ApplicationRepository>();
+	private List<ApplicationRepository> applications = new LinkedList<>();
+	private HashMap<String, ApplicationRepository> map = new HashMap<>();
 
 	@SuppressWarnings("unchecked")
 	public void deserializeApplications(String source) {
-		try (FileInputStream fis = new FileInputStream(source); ObjectInputStream ois = new ObjectInputStream(fis);) {
+		try (FileInputStream fis = new FileInputStream(source); ObjectInputStream ois = new ObjectInputStream(fis)) {
 			applications = (List<ApplicationRepository>) ois.readObject();
-			map = new HashMap<String, ApplicationRepository>();
+			map = new HashMap<>();
 			for (ApplicationRepository app : applications) {
 				map.put(app.getHtml_url(), app);
 			}

@@ -16,9 +16,8 @@ import de.uniba.pi.applicationsearcher.Main;
 import de.uniba.pi.dataobjects.ApplicationRepository;
 
 public class ProjectExtractor {
-	JsonParser parser = new JsonParser();
-	private List<ApplicationRepository> applications = new LinkedList<ApplicationRepository>();
-	private HashMap<String, ApplicationRepository> map = new HashMap<String, ApplicationRepository>();
+	private List<ApplicationRepository> applications = new LinkedList<>();
+	private final HashMap<String, ApplicationRepository> map = new HashMap<>();
 
 	public void setApplications(List<ApplicationRepository> applications) {
 		this.applications = applications;
@@ -36,11 +35,11 @@ public class ProjectExtractor {
 			String dataStorageFile = baseOfFilename + listNumber + ".txt";
 			System.out.printf("Get information for %s%n", dataStorageFile);
 			String storedData = Files.readString(Path.of(dataStorageFile));
-			JsonObject storedDataAsJson = parser.parse(storedData).getAsJsonObject();
+			JsonObject storedDataAsJson = JsonParser.parseString(storedData).getAsJsonObject();
 			JsonArray items = storedDataAsJson.getAsJsonArray("items");
 			for (JsonElement element : items) {
 				try {
-					Thread.sleep(1000);
+					Thread.sleep(2000);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -71,21 +70,20 @@ public class ProjectExtractor {
 			application.addPath(filePath);
 			application.addServerlessFile(contentOfServerlessFile);
 			application.setHtml_url(html_url);
-			application.setStars(Integer.valueOf(stars));
+			application.setStars(Integer.parseInt(stars));
 			applications.add(application);
 			map.put(html_url, application);
 		}
 	}
 
-	private String loadContentOfServerlessFile(String urlRef) {
+	private String loadContentOfServerlessFile(String urlRef) throws IOException {
 		String downloadURL = extractDownloadURLofServerlessFile(urlRef);
-		String contentOfServerlessFile = Main.gitHubRepositoryImplRaw.getContentOfUrl(downloadURL);
-		return contentOfServerlessFile;
+		return Main.gitHubRepositoryImplRaw.getContentOfUrl(downloadURL);
 	}
 
-	private String extractDownloadURLofServerlessFile(String urlRef) {
+	private String extractDownloadURLofServerlessFile(String urlRef) throws IOException {
 		String urlContent = Main.gitHubRepositoryImplRaw.getContentOfUrl(urlRef);
-		JsonObject urlContentJson = parser.parse(urlContent).getAsJsonObject();
+		JsonObject urlContentJson = JsonParser.parseString(urlContent).getAsJsonObject();
 		String downloadURL = urlContentJson.getAsJsonObject().get("download_url").toString();
 		downloadURL = downloadURL.replaceAll("\"", "");
 		return downloadURL;
@@ -102,12 +100,12 @@ public class ProjectExtractor {
 		return repositoryObject.get("html_url").toString().replaceAll("\"", "");
 	}
 
-	private String getStars(JsonElement element) {
+	private String getStars(JsonElement element) throws IOException {
 		JsonObject repositoryObject = element.getAsJsonObject().getAsJsonObject("repository");
 		String starUrl = repositoryObject.get("url").toString();
 		starUrl = starUrl.replaceAll("\"", "");
 		String jsonStars = Main.gitHubRepositoryImplRaw.getContentOfUrl(starUrl);
-		JsonObject jsonStarObject = parser.parse(jsonStars).getAsJsonObject();
+		JsonObject jsonStarObject = JsonParser.parseString(jsonStars).getAsJsonObject();
 		return jsonStarObject.get("stargazers_count").toString().replaceAll("\"", "");
 	}
 

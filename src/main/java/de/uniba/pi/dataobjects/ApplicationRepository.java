@@ -8,9 +8,9 @@ public class ApplicationRepository implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private String html_url;
-	private List<String> files = new ArrayList<String>();
-	private List<String> paths = new ArrayList<String>();
-	private List<String> yamlFiles = new ArrayList<String>();
+	private List<String> files = new ArrayList<>();
+	private final List<String> paths = new ArrayList<>();
+	private final List<String> yamlFiles = new ArrayList<>();
 	private int stars;
 
 	public String getHtml_url() {
@@ -55,13 +55,11 @@ public class ApplicationRepository implements Serializable {
 
 	@Override
 	public String toString() {
-		StringBuilder result = new StringBuilder();
-		result.append(html_url);
-		result.append(System.lineSeparator());
-		result.append(String.join("; ", paths));
-		result.append(System.lineSeparator());
-		result.append(stars);
-		return result.toString();
+		return html_url +
+				System.lineSeparator() +
+				String.join("; ", paths) +
+				System.lineSeparator() +
+				stars;
 	}
 
 	@Override
@@ -81,18 +79,11 @@ public class ApplicationRepository implements Serializable {
 			return false;
 		}
 		ApplicationRepository other = (ApplicationRepository) obj;
-		if (!this.html_url.equals(other.getHtml_url())) {
-			return false;
-		}
-		return true;
+		return this.html_url.equals(other.getHtml_url());
 	}
 
 	public void addServerlessFile(String contentOfServerlessFile) {
 		this.yamlFiles.add(contentOfServerlessFile);
 	}
 
-	public void  removeYamlFile() {
-		this.yamlFiles.remove(0);
-	}
-	
 }

@@ -19,7 +19,7 @@ public class Helper {
 				.collect(Collectors.toList());
 	}
 
-	public String createGitCloneCommands() {
+	public void createGitCloneCommands() {
 
 		StringBuilder result = new StringBuilder();
 		result.append("#!/bin/sh").append(System.lineSeparator());
@@ -40,7 +40,6 @@ public class Helper {
 		} catch (IOException e) {
 			System.err.printf("Not possible to write file: %s%n", script.getFileName());
 		}
-		return result.toString();
 	}
 
 	private String getFormattedFolder(int counter) {
@@ -73,7 +72,7 @@ public class Helper {
 		}
 	}
 
-	public String createCSVwithProjectInformation() {
+	public void createCSVWithProjectInformation() {
 		StringBuilder result = new StringBuilder();
 		int counter = 0;
 		for (var app : applications) {
@@ -83,7 +82,6 @@ public class Helper {
 				String yamlPath = app.getPaths().get(i);
 				result.append(";").append(yamlPath).append(System.lineSeparator());
 				System.out.println(counter++);
-				app.getHtml_url();
 				System.out.println(yamlPath);
 				System.out.println(app.getHtml_url());
 				result.append(getFunctionInformation(yamlFile, app.getHtml_url()));
@@ -96,7 +94,6 @@ public class Helper {
 		} catch (IOException e) {
 			System.err.printf("could not write result to: %s%n", path.getFileName());
 		}
-		return result.toString();
 	}
 
 	private StringBuilder getFunctionInformation(String yamlFile, String appName) {
